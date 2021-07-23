@@ -9,18 +9,21 @@ const pool=mariadb.createPool({
     connectionLimit: 5
 });
 
-pool.getConnection()
-    .then (conn => {
-        console.log('connected...');
-            return conn.query('INSERT INTO Users value (?, ?)', [user.id, user.firstname])
-            .then(res => {
-                console.log(res);
-                conn.end();
-            }).catch(err => {
-                console.log("Error", err);
-                conn.end();
-            })
-    }).catch(err => {
-        console.error('connection problem ', err);
-    })
+function saveUser(user) {
+    pool.getConnection()
+        .then (conn => {
+            console.log('connected...');
+             return conn.query('INSERT INTO Users value (?, ?)', [user.id, user.firstname])
+                .then(res => {
+                    console.log(res);
+                    conn.end();
+                }).catch(err => {
+                    console.log("Error", err);
+                    conn.end();
+                })
+        }).catch(err => {
+            console.error('connection problem ', err);
+        })
+}
 
+module.exports = {saveUser};
